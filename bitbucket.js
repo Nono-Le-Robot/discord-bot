@@ -19,7 +19,7 @@ const checkPR = () =>{
   .then(async (res) => {
   const currentPRSize = res.values.length;
   if (currentPRSize !== previousPRSize) {
-    console.log("Nouvelle PR en attente !");
+    console.log("Le status des PR a changé :");
     previousPRSize = currentPRSize;
     if (channel) {
       const fetchedMessages = await channel.messages.fetch({ limit: 100 });
