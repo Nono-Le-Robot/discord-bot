@@ -18,13 +18,15 @@ client.on('ready', async () => {
 });
 
 client.on('messageCreate', async (message) => {
+  const messageContent = message.content.trim().toLowerCase(); 
   let validRequest = true;
-  if(!message.content.includes('!imt')){
+
+  if(!messageContent.includes('!imt')){
     validRequest = false;
   }
   if(validRequest){
     const userGlobalName = message.author.globalName;
-    const messageContent = message.content.trim().toLowerCase(); 
+    console.log(messageContent);
     const messages = await channel.messages.fetch({ limit: 100 });
     let presence = [];
     if(messages){
