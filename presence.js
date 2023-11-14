@@ -18,14 +18,11 @@ let recapSemaine = {
   vendredi : [],
 }
 
-
 client.on('ready', async () => {
   channel = client.channels.cache.get(canalID);
   console.clear();
   console.log('ready')
 });
-
-
 
 client.on('messageCreate', async (message) => {
   const messageContent = message.content.trim().toLowerCase(); 
@@ -36,29 +33,21 @@ client.on('messageCreate', async (message) => {
   let presence = [];
   let presenceData = {}
   let history = []
-  let recapMessage;
-
   if(messageContent.includes('imt')){
     validRequest = true;
   }
-
   if(username === "PixaidBot"){
     postedByBot = true
   }
-
   if(!validRequest && !postedByBot){
     await message.delete()
   }
-
-  if(!postedByBot && validRequest){ // message valide
-    // on récupére l'historique
-
+  if(!postedByBot && validRequest){
     const messages = await channel.messages.fetch({ limit: 100 });
     if(messages){
       messages.forEach( async (prevMessage) => {
         const prevMessageContent = prevMessage.content;
         const prevMessageUserGlobalName = prevMessage.author.globalName;
-
         if(prevMessage){     
           if (prevMessageContent?.includes(globalName) || prevMessageUserGlobalName?.includes(globalName)) {
             if(!prevMessageContent.trim().toLowerCase().includes('commandes')){
@@ -101,7 +90,6 @@ ${deskEmoji}    ***TT***    =>    ${TT.map(day => `${day} `).join(' | ')}
       }
     }
   }
-
   function extraireNomEtJours(chaine) {
     const regex = /\*\*(.*?)\*\*\s*:\s*.*\*\*\*IMT\*\*\*\s*=>\s*(.*)/;
     const match = regex.exec(chaine);
@@ -114,31 +102,27 @@ ${deskEmoji}    ***TT***    =>    ${TT.map(day => `${day} `).join(' | ')}
       return null;
     }
   }
-  
   setTimeout( async () => {
     const newFetch = await channel.messages.fetch({ limit: 100 });
     if(!postedByBot){
-    newFetch.forEach(element => {
-      test.push(element.content)
-    })
-    test.forEach(element => {
-      const resultats = extraireNomEtJours(element);
-      alldays.push(resultats)
-    })
-
-    
-    alldays.forEach(recap => {
-    
-      recap?.presence?.forEach(presence => {
-        if(presence.includes('lundi')) recapSemaine.lundi.push(recap.nom)
-        if(presence.includes('mardi')) recapSemaine.mardi.push(recap.nom)
-        if(presence.includes('mercredi')) recapSemaine.mercredi.push(recap.nom)
-        if(presence.includes('jeudi')) recapSemaine.jeudi.push(recap.nom)
-        if(presence.includes('vendredi')) recapSemaine.vendredi.push(recap.nom)
+      newFetch.forEach(element => {
+        test.push(element.content)
       })
-    })
-    if(messageContent.includes('recap') || messageContent.includes('récap') || messageContent.includes('imt')  ){
-      let recapReply = 
+      test.forEach(element => {
+        const resultats = extraireNomEtJours(element);
+        alldays.push(resultats)
+      })
+      alldays.forEach(recap => {
+        recap?.presence?.forEach(presence => {
+          if(presence.includes('lundi')) recapSemaine.lundi.push(recap.nom)
+          if(presence.includes('mardi')) recapSemaine.mardi.push(recap.nom)
+          if(presence.includes('mercredi')) recapSemaine.mercredi.push(recap.nom)
+          if(presence.includes('jeudi')) recapSemaine.jeudi.push(recap.nom)
+          if(presence.includes('vendredi')) recapSemaine.vendredi.push(recap.nom)
+        })
+      })
+      if(messageContent.includes('recap') || messageContent.includes('récap') || messageContent.includes('imt')  ){
+        let recapReply = 
 `
 ================== PRESENCE IMT ===================
 Lundi => ${recapSemaine.lundi.join(' | ')}
@@ -148,26 +132,16 @@ Jeudi => ${recapSemaine.jeudi.join(' | ')}
 Vendredi => ${recapSemaine.vendredi.join(' | ')}
 ===================================================
 `
-const histo = await channel.messages.fetch({ limit: 100 });
-histo.forEach(test => {
-  if (test.content.trim().toLowerCase().includes('presence')){
-    test.delete()
-  }
-})
-      await channel.send(recapReply);
+        const histo = await channel.messages.fetch({ limit: 100 });
+        histo.forEach(test => {
+          if (test.content.trim().toLowerCase().includes('presence')){
+            test.delete()
+          }
+        })
+        await channel.send(recapReply);
+      }
     }
-
-
-
-
-  }
   }, (500));
-
-
-
-
-
-
   test = [];
   alldays = []; 
   recapSemaine = {
@@ -180,5 +154,3 @@ histo.forEach(test => {
 })
 
 client.login(config.discordToken);
-
-
