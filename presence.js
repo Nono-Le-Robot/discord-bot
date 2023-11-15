@@ -132,6 +132,9 @@ Jeudi => ${recapSemaine.jeudi.join(' | ')}
 Vendredi => ${recapSemaine.vendredi.join(' | ')}
 ===================================================
 `
+
+
+
         const histo = await channel.messages.fetch({ limit: 100 });
         histo.forEach(test => {
           if (test.content.trim().toLowerCase().includes('presence')){
