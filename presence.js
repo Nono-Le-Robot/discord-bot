@@ -1,3 +1,9 @@
+// Pour lancer le script tout les vendredi a 08h00 : 
+
+// const cron = require('node-cron');
+// const cronActive = false;
+// cron.schedule('0 8 * * 5', () => {
+// cronActive = true;
 const { Client, GatewayIntentBits } = require('discord.js');
 const config = require('./config');
 const client = new Client({ 
@@ -7,7 +13,8 @@ const client = new Client({
     GatewayIntentBits.MessageContent,
   ] 
 });
-const canalID = "1173280156161409085"; // canal présence
+
+const canalID = "1173280156161409085"; // canal présence                             
 let channel;
 let test = []
 let recapSemaine = {
@@ -22,6 +29,19 @@ client.on('ready', async () => {
   channel = client.channels.cache.get(canalID);
   console.clear();
   console.log('ready')
+  if(cronActive){
+    const messages = await channel.messages.fetch({ limit: 100 });
+    if(messages){
+      messages.forEach( async (prevMessage) => {
+        const prevMessageContent = prevMessage.content;
+        if(prevMessage){     
+          if(!prevMessageContent.trim().toLowerCase().includes('commandes')){
+            await prevMessage.delete();
+          }
+        }
+      });
+    }
+  }
 });
 
 client.on('messageCreate', async (message) => {
@@ -110,7 +130,9 @@ ${deskEmoji}    ***TT***    =>    ${TT.map(day => `${day} `).join(' | ')}
       })
       test.forEach(element => {
         const resultats = extraireNomEtJours(element);
-        alldays.push(resultats)
+        if(!messageContent.includes("not")){
+          alldays.push(resultats)
+        }
       })
       alldays.forEach(recap => {
         recap?.presence?.forEach(presence => {
@@ -132,9 +154,6 @@ Jeudi => ${recapSemaine.jeudi.join(' | ')}
 Vendredi => ${recapSemaine.vendredi.join(' | ')}
 ===================================================
 `
-
-
-
         const histo = await channel.messages.fetch({ limit: 100 });
         histo.forEach(test => {
           if (test.content.trim().toLowerCase().includes('presence')){
@@ -157,3 +176,5 @@ Vendredi => ${recapSemaine.vendredi.join(' | ')}
 })
 
 client.login(config.discordToken);
+
+// });
