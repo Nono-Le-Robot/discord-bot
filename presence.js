@@ -1,9 +1,9 @@
 // Pour lancer le script tout les vendredi a 08h00 : 
 
-// const cron = require('node-cron');
-// const cronActive = false;
-// cron.schedule('0 8 * * 5', () => {
-// cronActive = true;
+const cron = require('node-cron');
+const cronActive = false;
+cron.schedule('0 8 * * 5', () => {
+cronActive = true;
 const { Client, GatewayIntentBits } = require('discord.js');
 const config = require('./config');
 const client = new Client({ 
@@ -177,4 +177,4 @@ Vendredi => ${recapSemaine.vendredi.join(' | ')}
 
 client.login(config.discordToken);
 
-// });
+});
