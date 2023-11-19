@@ -97,13 +97,13 @@ cron.schedule('0 8 * * 5', () => {
           const buildingEmoji = '💼';
           const deskEmoji = '🖥️';
           const reply = 
-  `
-  ===================================================
-  **${globalName}** :
-  ${buildingEmoji}    ***IMT***    =>    ${IMT.map(day => `${day} `).join(' | ')}
-  ${deskEmoji}    ***TT***    =>    ${TT.map(day => `${day} `).join(' | ')}
-  ===================================================
-  `;
+`
+===================================================
+**${globalName}** :
+${buildingEmoji}    ***IMT***    =>    ${IMT.map(day => `${day} `).join(' | ')}
+${deskEmoji}    ***TT***    =>    ${TT.map(day => `${day} `).join(' | ')}
+===================================================
+`;
           await channel.send(reply);
           presence = {};
           presenceData = [];
@@ -145,15 +145,15 @@ cron.schedule('0 8 * * 5', () => {
         })
         if(messageContent.includes('recap') || messageContent.includes('récap') || messageContent.includes('imt')  ){
           let recapReply = 
-  `
-  ================== PRESENCE IMT ===================
-  Lundi => ${recapSemaine.lundi.join(' | ')}
-  Mardi => ${recapSemaine.mardi.join(' | ')}
-  Mercredi => ${recapSemaine.mercredi.join(' | ')}
-  Jeudi => ${recapSemaine.jeudi.join(' | ')}
-  Vendredi => ${recapSemaine.vendredi.join(' | ')}
-  ===================================================
-  `
+`
+================== PRESENCE IMT ===================
+Lundi => ${recapSemaine.lundi.join(' | ')}
+Mardi => ${recapSemaine.mardi.join(' | ')}
+Mercredi => ${recapSemaine.mercredi.join(' | ')}
+Jeudi => ${recapSemaine.jeudi.join(' | ')}
+Vendredi => ${recapSemaine.vendredi.join(' | ')}
+===================================================
+`
           const histo = await channel.messages.fetch({ limit: 100 });
           histo.forEach(test => {
             if (test.content.trim().toLowerCase().includes('presence')){
